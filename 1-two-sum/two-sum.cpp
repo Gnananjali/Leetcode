@@ -5,12 +5,10 @@ public:
 
         for(int i=0;i<nums.size();i++){
             int need = target - nums[i];
-        
-        if(map.count(need)){
-            return {i, map[need]};
-        
-        }
-        map[nums[i]]=i;
+            if(map.count(need)){
+                return {i, map[need]};
+            }
+            map[nums[i]]=i;
         }
         return {};
     }
