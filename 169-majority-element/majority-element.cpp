@@ -1,12 +1,12 @@
 class Solution {
 public:
     int majorityElement(vector<int>& nums) {
-        unordered_map<int,int> map;
-        int maxVal = 0, res = 0;
+        unordered_map<int, int> mp;
+        int maxVal = 0, res=0;
         for(int num : nums){
-            map[num]++;
+            mp[num]++;
         }
-        for(auto it:map){
+        for(auto& it:mp){
             if(it.second > maxVal){
                 maxVal = it.second;
                 res = it.first;
