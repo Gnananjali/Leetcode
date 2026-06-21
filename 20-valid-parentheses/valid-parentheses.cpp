@@ -1,17 +1,18 @@
 class Solution {
 public:
     bool isValid(string s) {
-        std::stack<char> sta;
+        stack<char> st;
         for(char ch:s){
-            if(ch=='(' || ch=='{' || ch=='['){
-                sta.push(ch);
+            if(ch=='(' || ch=='[' || ch=='{'){
+                st.push(ch);
             }else{
-                if(sta.empty() || (ch==')' && sta.top()!='(') || (ch=='}' && sta.top()!='{') || (ch==']' && sta.top()!='[')){
+                if(st.empty() || ch==')'&&st.top()!='(' || ch==']'&&st.top()!='[' || ch=='}'&&st.top()!='{'){
                     return false;
                 }
-                sta.pop();
+                st.pop();
             }
+
         }
-        return sta.empty();
+        return st.empty();
     }
 };
