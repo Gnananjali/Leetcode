@@ -3,12 +3,11 @@ public:
     bool isAnagram(string s, string t) {
         unordered_map<char, int> mp;
         if(s.size() != t.size()) return false;
-        for(char ch:s){
+        for(char ch: s){
             mp[ch]++;
         }
-        for(char c:t){
-            if(mp.count(c))
-            mp[c]--;
+        for(char ch: t){
+            mp[ch]--;
         }
         for(auto& it:mp){
             if(it.second != 0) return false;
