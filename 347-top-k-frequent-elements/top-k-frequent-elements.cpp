@@ -5,15 +5,15 @@ public:
         for(int num:nums){
             mp[num]++;
         }
-        vector<pair<int,int>> vect;
-        vector<int> ans;
-        for(auto& it:mp){
-            vect.push_back({it.second, it.first});
+        vector<pair<int,int>> box;
+        for(auto& it : mp){
+            box.push_back({it.second, it.first});
         }
-        sort(vect.rbegin(), vect.rend());
+        sort(box.rbegin(), box.rend());
+        vector<int> res;
         for(int i=0;i<k;i++){
-            ans.push_back(vect[i].second);
+            res.push_back(box[i].second);
         }
-        return ans;
+        return res;
     }
 };
