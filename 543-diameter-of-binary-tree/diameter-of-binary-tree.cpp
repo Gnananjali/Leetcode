@@ -16,10 +16,9 @@ public:
         if(!root) return 0;
         int leftHeight = dfs(root->left);
         int rightHeight = dfs(root->right);
-        diameter = max(diameter, leftHeight+rightHeight);
+        diameter = max(diameter, leftHeight + rightHeight);
 
         return 1+max(leftHeight, rightHeight);
-
     }
     int diameterOfBinaryTree(TreeNode* root) {
         dfs(root);
