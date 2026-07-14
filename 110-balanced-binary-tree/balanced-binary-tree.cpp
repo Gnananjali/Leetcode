@@ -11,20 +11,22 @@
  */
 class Solution {
 public:
-    bool balanced = true;
+    
     int dfs(TreeNode* root){
         if(!root) return 0;
         int leftHeight = dfs(root->left);
+        if(leftHeight == -1) return -1;
         int rightHeight = dfs(root->right);
+        if(rightHeight == -1) return -1;
         if(abs(leftHeight - rightHeight) > 1){
-            balanced = false;
+            return -1;
             
         }
         return 1+max(leftHeight, rightHeight);
     }
     bool isBalanced(TreeNode* root) {
-     dfs(root);
-     return balanced;
+     return dfs(root) != -1;
+     
         
     }
 };
