@@ -16,13 +16,13 @@ public:
     int maxAreaOfIsland(vector<vector<int>>& grid) {
         int m = grid.size();
         int n = grid[0].size();
-        int maxLand = 0;
+        
         int maxArea = 0;
         vector<vector<bool>> visited(m, vector<bool>(n, false));
         for(int row=0;row<m;row++){
             for(int col=0;col<n;col++){
-                maxLand = dfs(row, col, grid, visited);
-                maxArea = max(maxArea, maxLand);
+                
+                maxArea = max(maxArea, dfs(row, col, grid, visited));
             }
         }
         return maxArea;
