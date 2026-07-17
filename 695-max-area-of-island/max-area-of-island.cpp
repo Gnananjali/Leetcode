@@ -1,33 +1,30 @@
 class Solution {
 public:
-    int dfs(int i, int j, vector<vector<int>>& grid, vector<vector<bool>>& vis){
+    int dfs(int row, int col, vector<vector<int>>& grid, vector<vector<bool>>& visited){
         int m = grid.size();
         int n = grid[0].size();
-        if(i<0 || j<0 || i>=m || j>= n || vis[i][j] || grid[i][j]==0) return 0;
-        vis[i][j] = true;
-        return 1+
-        dfs(i+1, j, grid, vis)+
-        dfs(i-1, j, grid, vis)+
-        dfs(i, j+1, grid, vis)+
-        dfs(i, j-1, grid, vis);
+        if(row<0 || row>=m || col<0 || col>=n || grid[row][col]==0 || visited[row][col])
+        return 0;
+
+        visited[row][col] = true;
+        return 1+ dfs(row+1, col, grid, visited)+
+                  dfs(row-1, col, grid, visited)+
+                  dfs(row, col+1, grid, visited)+
+                  dfs(row, col-1, grid, visited);
     }
+
     int maxAreaOfIsland(vector<vector<int>>& grid) {
         int m = grid.size();
         int n = grid[0].size();
-
-        vector<vector<bool>> vis(m, vector<bool>(n, false));
         int maxLand = 0;
-        
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-                if(grid[i][j] == 1 &&!vis[i][j]){
-                
-                int area = dfs(i, j, grid, vis);
-                
-                maxLand = max(maxLand, area);
-            }
+        int maxArea = 0;
+        vector<vector<bool>> visited(m, vector<bool>(n, false));
+        for(int row=0;row<m;row++){
+            for(int col=0;col<n;col++){
+                maxLand = dfs(row, col, grid, visited);
+                maxArea = max(maxArea, maxLand);
             }
         }
-       return maxLand;
+        return maxArea;
     }
 };
