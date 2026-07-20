@@ -1,40 +1,46 @@
-class DSU {
-public:
+class DisjointSet{
+    public:
     vector<int> parent, size;
-    DSU(int n){
-        parent.resize(n);
-        size.resize(n, 1);
-        for(int i=0;i<n;i++){
+    DisjointSet(int n){
+        parent.resize(n+1);
+        size.resize(n+1, 1);
+        for(int i=0;i<=n;i++){
             parent[i] = i;
         }
     }
-    int find(int x){
-        if(parent[x] == x) return x;
-        return parent[x] = find(parent[x]);
+    int findParent(int node){
+        if(parent[node]==node) return node;
+        return parent[node] = findParent(parent[node]);
     }
-    bool unite(int u, int v){
-        int pu = find(u);
-        int pv = find(v);
-        if(pu == pv) return false;
-        if(size[pu]<size[pv])
-        swap(pu,pv);
-        parent[pv] = pu;
-        size[pu] += size[pv];
-        return true;
+
+    void UnionbySize(int u, int v){
+        int parentU = findParent(u);
+        int parentV = findParent(v);
+        if(parentU == parentV) return;
+
+        if(size[parentU] < size[parentV]){
+            parent[parentU] = parentV;
+            size[parentV] += size[parentU];
+        }else{
+            parent[parentV] = parentU;
+            size[parentU] += size[parentV];
+        }
     }
 };
 class Solution {
 public:
     vector<int> findRedundantConnection(vector<vector<int>>& edges) {
         int n = edges.size();
-        DSU dsu(n+1);
-        for(auto& e:edges){
-            int u = e[0];
-            int v = e[1];
-            if(dsu.find(u) == dsu.find(v)){
-                return e;
+        DisjointSet ds(n);
+        for(auto &it: edges){
+            int u = it[0];
+            int v = it[1];
+
+            if(ds.findParent(u) == ds.findParent(v)){
+                return {u, v};
+            } else{
+                ds.UnionbySize(u, v);
             }
-            dsu.unite(u,v);
         }
         return {};
     }
