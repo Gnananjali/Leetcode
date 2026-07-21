@@ -5,15 +5,23 @@ public:
         for(int num:nums){
             mp[num]++;
         }
-        vector<pair<int,int>> box;
+
+        priority_queue<pair<int,int>, vector<pair<int,int>>, greater<pair<int,int>>> pq;
+        vector<int> ans;
         for(auto& it : mp){
-            box.push_back({it.second, it.first});
+            int number = it.first;
+            int freq = it.second;
+
+            
+            pq.push({freq, number});
+
+            if(pq.size() > k) pq.pop();
+
         }
-        sort(box.rbegin(), box.rend());
-        vector<int> res;
-        for(int i=0;i<k;i++){
-            res.push_back(box[i].second);
+            while(!pq.empty()){
+                ans.push_back(pq.top().second);
+            pq.pop();
         }
-        return res;
+        return ans;
     }
 };
