@@ -17,10 +17,7 @@ public:
                 int freq = pq.top().first;
                 char ch = pq.top().second;
                 pq.pop();
-                while(freq != 0){
-                    ans.push_back(ch);
-                    freq--;
-                }
+                ans.append(freq, ch);
             }
             return ans;
     }
