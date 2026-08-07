@@ -5,8 +5,9 @@ public:
         vis[node] = true;
         for(auto &[nei, path] : adj[node]){
             if(!vis[nei]){
-                if(path)
+                if(path){
                 count++;
+                }
                 dfs(nei, adj, count, vis);
             }
             
