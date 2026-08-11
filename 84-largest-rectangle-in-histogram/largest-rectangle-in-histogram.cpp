@@ -25,7 +25,8 @@ public:
 
                 area = max(height*width, area);
             }
-            st.push(i);
+            if(i<n)
+                st.push(i);
             
         }
         return area;
