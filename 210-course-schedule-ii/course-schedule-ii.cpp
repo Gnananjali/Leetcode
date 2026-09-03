@@ -1,37 +1,38 @@
 class Solution {
 public:
-    bool dfs(int node, vector<vector<int>>& adj, vector<int>& state, stack<int>& st){
-        if(state[node]==1) return false;
-        if(state[node]==2) return true;
-        state[node] = 1;
-        for(int nei : adj[node]){
-            if(!dfs(nei, adj, state, st))
-                return false;
-            }
-            state[node] = 2;
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<int> indegree(numCourses, 0);
+        vector<vector<int>> adj(numCourses);
+
         
-        st.push(node);
-        return true;
-    }
-    vector<int> findOrder(int n, vector<vector<int>>& prerequisites) {
-        vector<int> state(n, 0);
-        vector<vector<int>> adj(n);
-        stack<int> st;
-        for(auto& p:prerequisites){
-            adj[p[1]].push_back(p[0]);
-        }
-        for(int i=0;i<n;i++){
-            if(state[i] == 0){
-                if(!dfs(i, adj, state, st))
-                return {};
+            for(auto& p:prerequisites){
+                int course = p[0];
+                int prerequisite = p[1];
+                adj[prerequisite].push_back(course);
+                indegree[course]++;
+            }
+        
+        queue<int> q;
+        for(int i=0;i<indegree.size();i++){
+            if(indegree[i] == 0){
+                q.push(i);
             }
         }
-        vector<int> order;
-        while(!st.empty()){
-            order.push_back(st.top());
-            st.pop();
+        vector<int> ans;
+        while(!q.empty()){
+            int node = q.front();
+            q.pop();
+            ans.push_back(node);
+
+            for(int nei : adj[node]){
+                indegree[nei]--;
+
+                if(indegree[nei] == 0){
+                    q.push(nei);
+                }
+            }
         }
-       
-        return order;
+        if(ans.size() != numCourses) return {};
+        return ans;
     }
 };
