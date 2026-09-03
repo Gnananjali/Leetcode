@@ -1,54 +1,52 @@
 class Solution {
 public:
     int orangesRotting(vector<vector<int>>& grid) {
-        int m = grid.size();
-        int n = grid[0].size();
+        int m=grid.size();
+        int n=grid[0].size();
         int minutes=0;
-        queue<pair<int,int>> q;
         int fresh=0;
+        queue<pair<int, int>> q;
+        
+
         for(int row=0;row<m;row++){
             for(int col=0;col<n;col++){
-                if(grid[row][col]==2){
+                if(grid[row][col] == 2){
                     q.push({row, col});
-                }else if(grid[row][col]==1){
+                }else if(grid[row][col] == 1){
                     fresh++;
-
                 }
             }
         }
-
+        if(fresh==0) return 0;
         int dr[] = {-1, 1, 0, 0};
-        int dc[] = {0, 0, -1, 1};
-
+        int dc[] = {0, 0, 1, -1};
         while(!q.empty()){
-            
             int size = q.size();
-            for(int i=0;i<size;i++){
+
+            while(size--){
                 auto node = q.front();
                 q.pop();
+                int r = node.first;
+                int c = node.second;
 
-                int row = node.first;
-                int col = node.second;
+                for(int k=0;k<4;k++){
+                    int newr = r + dr[k];
+                    int newc = c + dc[k];
 
-                for(int i=0;i<4;i++){
-                    int newRow = row + dr[i];
-                    int newCol = col + dc[i];
+                    if(newr >= 0 && newc >= 0 && newr < m && newc < n && grid[newr][newc] == 1){
 
-                    if(newRow>=0 && newRow<m && newCol>=0 && newCol<n && grid[newRow][newCol]==1){
-                        grid[newRow][newCol] = 2;
+                    
+                        grid[newr][newc] = 2;
                         fresh--;
-                        q.push({newRow, newCol});
-                    }
-                }
-            }
-                    if(!q.empty()){
-                        minutes++;
+                        q.push({newr, newc});
                     }
                     
-                
-                
+                }
+            }
+            minutes++;
         }
-        if(fresh==0) return minutes;
-        else return -1;
+        
+        return fresh==0 ? minutes-1 : -1;  
+
     }
 };
