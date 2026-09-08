@@ -1,53 +1,33 @@
-class DisjointSet {
-public:
-vector<int> parent, size;
-        
-        DisjointSet(int n){
-            parent.resize(n+1);
-            size.resize(n+1, 1);
-            for(int i=0;i<=n;i++){
-                parent[i] = i;
-            }
-        }
-        int findParent(int node){
-            if(parent[node]==node) {
-            return node;
-        }
-            return parent[node] = findParent(parent[node]);
-        }
-
-        void UnionbySize(int u, int v){
-            int parentU = findParent(u);
-            int parentV = findParent(v);
-            if(parentU == parentV) return;
-            if(size[parentU] < size[parentV]){
-                parent[parentU] = parentV;
-                size[parentV] += size[parentU];
-            }else{
-                parent[parentV] = parentU;
-                size[parentU] += size[parentV];
-            }
-        }
-};
 class Solution {
 public:
+    void dfs(int node, vector<vector<int>>& graph, vector<bool>& visited){
+        visited[node] = true;
+
+        for(int i:graph[node]){
+            if(!visited[i]){
+                dfs(i, graph, visited);
+            }
+        }
+    }
     int findCircleNum(vector<vector<int>>& isConnected) {
         int n = isConnected.size();
-        DisjointSet ds(n);
+        int count = 0;
+        vector<vector<int>> graph(n);
+        vector<bool> visited(n, false);
 
         for(int i=0;i<n;i++){
-            for(int j=i+1;j<n;j++){
-                if(isConnected[i][j]==1){
-                    ds.UnionbySize(i,j);
+            for(int j=0;j<n;j++){
+                if(isConnected[i][j] == 1){
+                    graph[i].push_back(j);
                 }
             }
         }
-        int provinces=0;
-        for(int i=0;i<n;i++){
-            if(ds.findParent(i)==i){
-                provinces++;
+        for(int x=0;x<n;x++){
+            if(!visited[x]){
+                count++;
+                dfs(x, graph, visited);
             }
         }
-        return provinces;
+        return count;
     }
 };
