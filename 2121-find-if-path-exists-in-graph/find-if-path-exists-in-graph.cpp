@@ -1,28 +1,27 @@
 class Solution {
 public:
+    bool dfs(int node, int destination, vector<vector<int>>& graph, vector<bool>& visited){
+        visited[node] = true;
 
-    bool dfs(int node, vector<vector<int>>& adj, int destination, vector<bool>& vis){
-        vis[node] = true;
         if(node == destination) return true;
-        for(int nei:adj[node]){
-            if(!vis[nei]){
-                if(dfs(nei, adj, destination, vis)) return true;
+        for(int i:graph[node]){
+            if(!visited[i]){
+                if(dfs(i, destination, graph, visited))
+                return true;
             }
+            
         }
         return false;
     }
     bool validPath(int n, vector<vector<int>>& edges, int source, int destination) {
-        vector<vector<int>> adj(n);
-        vector<bool> vis(n, false);
-        for(auto& it:edges){
-            int u = it[0];
-            int v = it[1];
-            adj[u].push_back(v);
-            adj[v].push_back(u);
+        vector<vector<int>> graph(n);
+        vector<bool> visited(n, false);
 
+        for(auto x:edges){
+            graph[x[0]].push_back(x[1]);
+            graph[x[1]].push_back(x[0]);
         }
-        if(dfs(source, adj, destination, vis))
-            return true;
-        return false;
+        
+        return dfs(source, destination, graph, visited);
     }
 };
