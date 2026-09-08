@@ -21,23 +21,18 @@ public:
 
 class Solution {
 public:
-    unordered_map<Node*, Node*> mp;
+    unordered_map<Node*, Node*>mp;
     Node* dfs(Node* node){
-        if(mp.count(node)){
-            return mp[node];
-        }
+        if(mp.find(node) != mp.end()) return mp[node];
         Node* clone = new Node(node->val);
         mp[node] = clone;
-
-        for(Node* i : node->neighbors){
-            clone->neighbors.push_back(dfs(i));
+        for(Node* nei : node->neighbors){
+            clone->neighbors.push_back(dfs(nei));
         }
         return clone;
     }
     Node* cloneGraph(Node* node) {
-        if(node == NULL)
-        return NULL;
-
+        if(node == nullptr) return nullptr;
         return dfs(node);
     }
 };
