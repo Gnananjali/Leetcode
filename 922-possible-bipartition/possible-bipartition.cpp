@@ -1,27 +1,34 @@
 class Solution {
 public:
-    bool dfs(int node, int color, vector<vector<int>>& adj, vector<int>& colors){
-        colors[node] = color;
-        for(int nei : adj[node]){
-            if(colors[nei] == -1){
-                if(!dfs(nei, 1-color, adj, colors))
+    bool dfs(int node, vector<vector<int>>& graph, vector<int>& groups){
+        for(int nei : graph[node]){
+            if(groups[nei] == -1){
+                groups[nei] = 1 - groups[node];
+
+                if(!dfs(nei, graph, groups))
                 return false;
-            }else if(colors[nei] == color){
+            }
+            else if(groups[node] == groups[nei]){
                 return false;
             }
         }
         return true;
     }
     bool possibleBipartition(int n, vector<vector<int>>& dislikes) {
-        vector<int> colors(n+1, -1);
-        vector<vector<int>> adj(n+1);
-        for(auto& e:dislikes){
-            adj[e[0]].push_back(e[1]);
-            adj[e[1]].push_back(e[0]);
+        vector<vector<int>> graph(n+1);
+        vector<int> groups(n+1, -1);
+        for(auto &it : dislikes){
+            int a = it[0];
+            int b = it[1];
+
+            graph[a].push_back(b);
+            graph[b].push_back(a);
         }
-        for(int i=0;i<=n;i++){
-            if(colors[i] == -1){
-                if(!dfs(i, 0, adj, colors))
+        for(int i=1;i<=n;i++){
+            if(groups[i] == -1){
+                groups[i]=0;
+
+                if(!dfs(i, graph, groups))
                 return false;
             }
         }
