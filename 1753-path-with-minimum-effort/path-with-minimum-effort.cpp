@@ -1,53 +1,42 @@
 class Solution {
 public:
-    int dijkstra(vector<vector<int>>& heights){
+    int minimumEffortPath(vector<vector<int>>& heights) {
         int m = heights.size();
         int n = heights[0].size();
 
         vector<vector<int>> effort(m, vector<int>(n, INT_MAX));
-
-        priority_queue<
-        vector<int>,
-        vector<vector<int>>,
-        greater<vector<int>>
-        > pq;
-
         effort[0][0] = 0;
+        priority_queue<tuple<int, int, int>,
+            vector<tuple<int, int, int>>, greater<tuple<int, int, int>>> pq;
+
         pq.push({0, 0, 0});
-
-        vector<int> dr = {1, -1, 0, 0};
-        vector<int> dc = {0, 0, 1, -1};
-
         while(!pq.empty()){
-            auto curr = pq.top();
-            pq.pop();
+        auto [currentEffort, r, c] = pq.top();
+        pq.pop();
+        if(currentEffort > effort[r][c]) continue;
 
-            int d = curr[0];
-            int r = curr[1];
-            int c = curr[2];
+        int dr[] = {1, -1, 0, 0};
+        int dc[] = {0, 0, 1, -1};
 
-            if(r == m-1 && c == n-1) return d;
-            if(d > effort[r][c]) continue;
+        for(int k=0;k<4;k++){
+            int nr = r + dr[k];
+            int nc = c + dc[k];
 
-            for(int k=0;k<4;k++){
-                int nr = r+dr[k];
-                int nc = c+dc[k];
+            if(nr<0 || nc<0 || nr>=m || nc>=n) continue;
 
-                if(nr<0 || nc<0 || nr>=m || nc>=n) continue;
+            if(r == m-1 && c == n-1) return currentEffort;
 
-                int wt = abs(heights[r][c] - heights[nr][nc]);
+            int edgeEffort = abs(heights[r][c] - heights[nr][nc]);
+            int newEffort = max(currentEffort, edgeEffort);
 
-                int newEffort = max(d, wt);
-                if(newEffort < effort[nr][nc]){
-                    effort[nr][nc] = newEffort;
-                    pq.push({newEffort, nr, nc});
-                }
+
+            if(newEffort < effort[nr][nc]){
+                effort[nr][nc] = newEffort;
+                pq.push({newEffort, nr, nc});
             }
         }
+        
+        }
         return 0;
-    }
-
-    int minimumEffortPath(vector<vector<int>>& heights) {
-        return dijkstra(heights);
     }
 };
