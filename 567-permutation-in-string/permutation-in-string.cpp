@@ -3,20 +3,17 @@ public:
     bool checkInclusion(string s1, string s2) {
         vector<int> need(26, 0);
         vector<int> window(26, 0);
-        int k = s1.size();
-        for(char c:s1){
-            need[c - 'a']++;
+        int left = 0;
+        for(int right=0;right<s1.size();right++){
+            need[s1[right] - 'a']++;
         }
-        for(int i=0;i<s2.size();i++){
-            window[s2[i] - 'a']++;
-
-            if(i >= k){
-                window[s2[i-k] - 'a']--;
+        for(int right=0;right<s2.size();right++){
+            window[s2[right] - 'a']++;
+            while(right-left+1 > s1.size()){
+                window[s2[left] - 'a']--;
+                left++;
             }
-            if(i >= k-1){
-                if(need == window)
-                return true;
-            }
+            if(window == need) return true;
         }
         return false;
     }
