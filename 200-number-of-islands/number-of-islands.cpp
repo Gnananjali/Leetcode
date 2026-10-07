@@ -9,10 +9,20 @@ public:
 
         visited[row][col] = true;
 
-        dfs(row-1, col, grid, visited);
+        int dr[] = {1, -1, 0, 0};
+        int dc[] = {0, 0, 1, -1};
+
+        for(int k=0;k<4;k++){
+            int nr = row + dr[k];
+            int nc = col + dc[k];
+
+            dfs(nr, nc, grid, visited);
+        }
+
+       /* dfs(row-1, col, grid, visited);
         dfs(row+1, col, grid, visited);
         dfs(row, col-1, grid, visited);
-        dfs(row, col+1, grid, visited);
+        dfs(row, col+1, grid, visited);  */
 
     }
     int numIslands(vector<vector<char>>& grid) {
