@@ -1,29 +1,30 @@
 class Solution {
 public:
-    vector<vector<bool>> visited;
-    void dfs(int row, int col, vector<vector<char>>& grid){
-        int m = grid.size();
-        int n = grid[0].size();
-        if(row<0 || row >= m || col<0 || col >=n || visited[row][col] || grid[row][col]!='1') {
-            return;
-        }
+    void dfs(int row, int col, vector<vector<char>>& grid, vector<vector<bool>>& visited){
+        int n = grid.size();
+        int m = grid[0].size();
+
+        
+        if(row>=n || col>=m || row<0 || col<0 || visited[row][col] || grid[row][col]!='1') return;
 
         visited[row][col] = true;
-        dfs(row-1, col, grid);
-        dfs(row+1, col, grid);
-        dfs(row, col-1, grid);
-        dfs(row, col+1, grid);
+
+        dfs(row-1, col, grid, visited);
+        dfs(row+1, col, grid, visited);
+        dfs(row, col-1, grid, visited);
+        dfs(row, col+1, grid, visited);
+
     }
     int numIslands(vector<vector<char>>& grid) {
-        int m = grid.size();
-        int n = grid[0].size();
+        int n = grid.size();
+        int m = grid[0].size();
         int count=0;
-        visited = vector<vector<bool>>(m, vector<bool>(n, false));
-        for(int row=0;row<m;row++){
-            for(int col=0;col<n;col++){
-                if(!visited[row][col] && grid[row][col]=='1'){
+        vector<vector<bool>> visited(n, vector<bool>(m, false));
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(!visited[i][j] && grid[i][j]=='1'){
                     count++;
-                    dfs(row, col, grid);
+                    dfs(i, j, grid, visited);
                 }
             }
         }
