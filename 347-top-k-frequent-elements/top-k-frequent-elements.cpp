@@ -11,10 +11,8 @@ public:
         }
         vector<int> ans;
         while(k--){
-            
             ans.push_back(pq.top().second);
             pq.pop();
-            
         }
         return ans;
     }
