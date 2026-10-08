@@ -1,48 +1,36 @@
 class Solution {
 public:
     int networkDelayTime(vector<vector<int>>& times, int n, int k) {
-        vector<vector<pair<int,int>>> adj(n+1);
-
+        vector<vector<pair<int, int>>> adj(n+1);
         for(auto &it:times){
             int u = it[0];
             int v = it[1];
             int w = it[2];
 
-            adj[u].push_back({v,w});
+            adj[u].push_back({v, w});
         }
-        vector<int> distance(n+1, INT_MAX);
-        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<pair<int,int>>> pq;
+        vector<int> dist(n+1, INT_MAX);
+        dist[k] = 0;
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
+        pq.push({0, k});
+        while(!pq.empty()) {
+            auto [d, node] = pq.top();
+                pq.pop();
+            for(auto [neighbor, weight] : adj[node]){
+                int newDist = d + weight;
 
-        distance[k] = 0;
-        pq.push({0,k});
+                if(newDist < dist[neighbor]){
+                    dist[neighbor] = newDist;
 
-        while(!pq.empty()){
-            auto curr = pq.top();
-            pq.pop();
-
-            int dist = curr.first;
-            int node = curr.second;
-
-            if(dist > distance[node]){
-                continue;
-            }
-            for(auto &it:adj[node]){
-                int neighbor = it.first;
-                int weight = it.second;
-
-                if(distance[node] + weight < distance[neighbor]){
-                    distance[neighbor] = distance[node] + weight;
-
-                    pq.push({distance[neighbor], neighbor}); 
+                    pq.push({newDist, neighbor});
                 }
             }
+            
         }
-        int ans=0;
+        int ans = 0;
         for(int i=1;i<=n;i++){
-            if(distance[i] == INT_MAX){
-                return -1;
-            }
-            ans = max(ans, distance[i]);
+            if(dist[i] == INT_MAX) return -1;
+            else ans = max(ans, dist[i]);
         }
         return ans;
     }
