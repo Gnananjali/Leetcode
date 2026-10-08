@@ -2,8 +2,9 @@ class Solution {
 public:
     int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
         vector<int> dist(n, INT_MAX);
-        vector<int> temp = dist;
+        
         dist[src] = 0;
+        vector<int> temp = dist;
         for(int i=0;i<=k;i++){
             for(auto &it : flights){
                 int from = it[0];
