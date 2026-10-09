@@ -5,18 +5,18 @@ public:
             result.push_back(current);
             return;
         }
-
         current.push_back(nums[index]);
         backtrack(index+1, nums, current, result);
         current.pop_back();
-
         backtrack(index+1, nums, current, result);
+
     }
     vector<vector<int>> subsets(vector<int>& nums) {
         vector<int> current;
         vector<vector<int>> result;
+
         backtrack(0, nums, current, result);
 
-        return result;
+        return result;        
     }
 };
