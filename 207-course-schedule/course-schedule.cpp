@@ -1,34 +1,48 @@
 class Solution {
 public:
-    bool dfs(int node, vector<vector<int>>& graph, vector<int>& state){
-        state[node] = 1;
-        for(int nei : graph[node]){
+    bool dfs(int node, vector<vector<int>>& adj, vector<int>& state, stack<int>& st){
+        state[node] = true;
+        
+        for(int nei : adj[node]){
             if(state[nei] == 1){
-                return true;
+                return false;
             }
-            if(state[nei] == 0){
-                if(dfs(nei, graph, state))
-                    return true;
+            if(state[nei]==0){
+                if(!dfs(nei, adj, state, st)){
+                    return false;
+                }
             }
         }
         state[node] = 2;
-        return false;
+        st.push(node);
+        return true;
+            
+        
+        
     }
     bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
-        vector<vector<int>> graph(numCourses);
-        for(auto &p : prerequisites){
-            int course = p[0];
-            int prerequisites = p[1];
-
-            graph[prerequisites].push_back(course);
-        }
         vector<int> state(numCourses, 0);
+        vector<vector<int>> adj(numCourses);
+        stack<int> st;
+        for(auto &it : prerequisites){
+            int a = it[0];
+            int b = it[1];
+            adj[b].push_back(a);
+        }
         for(int i=0;i<numCourses;i++){
             if(state[i] == 0){
-                if(dfs(i, graph, state))
-                    return false;
+                if(!dfs(i, adj, state, st)){
+                    return {};
+                }
+                    
+                
             }
         }
-        return true;
+        vector<int> ans;
+        while(!st.empty()){
+            ans.push_back(st.top());
+            st.pop();
+        }
+        return ans.size()==numCourses?true:false;
     }
 };
